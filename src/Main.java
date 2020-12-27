@@ -57,7 +57,8 @@ public class Main {
 /*
 파일 열기 담당 클래스
 파일 여는건 자바 JFileChooser 사용함
-어셈블리 파일의 확장자는 *.s
+어셈블리 파일의 확장자는 *.s 또는 *.asm
+혹시나 어셈블러 파일이 없어서 급조한 텍스트 파일을 사용할 사람을 위해 텍스트 파일도 읽을수 있게 처리함
 */
 class FileOpen{
 
@@ -72,14 +73,17 @@ class FileOpen{
         JFileChooser chooser = new JFileChooser();
 
         // 파일 선택할 때 확장자 필터 설정
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+        FileNameExtensionFilter filterFileS = new FileNameExtensionFilter(
                 "어셈블러 파일","s");
-        FileNameExtensionFilter filter2 = new FileNameExtensionFilter(
+        FileNameExtensionFilter filterFileAsm = new FileNameExtensionFilter(
+                "어셈블러 파일","asm");
+        FileNameExtensionFilter filterFileText = new FileNameExtensionFilter(
                 "텍스트 파일","txt");
 
         // 확장자 필터 적용 - 이 필터를 적용하게 되면 위의 필터에 적용된 확장자로밖에 열지 못합니다.
-        chooser.setFileFilter(filter2);
-        chooser.setFileFilter(filter);
+        chooser.setFileFilter(filterFileText);
+        chooser.setFileFilter(filterFileAsm);
+        chooser.setFileFilter(filterFileS);
         
         // 파일 열기 창 생성
         chooser.showOpenDialog(null);
