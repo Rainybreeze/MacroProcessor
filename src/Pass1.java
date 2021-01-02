@@ -51,10 +51,12 @@ class Pass1 {
             else if(originDataLine.contains("MACRO")){
                 macroflag = true;
                 Vector<String> arg = new Vector<String>();
+                
+                // 가인수 분해
                 String[] t = originDataLine.split("\\,"+"\\s+");
                 String[] t1 = t[0].split("\\s+");
 
-                // 가인수 추가
+                // 분해된 가인수 추가
                 arg.add(t1[2]);
                 arg.addAll(Arrays.asList(t).subList(1, t.length));
 
@@ -62,12 +64,45 @@ class Pass1 {
                 mntVector.add(new MNT(mntVector.size(), t1[0], mdtVector.size(), arg));
             }
 
-            // 만약 읽어들인 줄이 매크로가 아닌 일반 코드일경우
+            // 만약 읽어들인 줄이 매크로가 아닌 일반 코드일경우 줄 전체를 imc 테이블에 넣음
+            else {
+                imc.add(originDataLine);
+            }
             
-            
+            //다음줄로 넘김
+            i++;
+        }
+
+        // MDT 테이블 출력
+        System.out.format("MDT\n");
+        for(int i=0; i < mdtVector.size(); i++){
+            System.out.format("%d %s\n", i, mdtVector.get(i).def);
+        }
+
+        // MNT 테이블 출력
+        System.out.format("\nMNT\n");
+        for (MNT mntPart : mntVector) {
+            System.out.format(
+                    "%d %s, MDT 인덱스 : %s, 가인수 : ",
+                    (mntPart.index + 1),
+                    mntPart.definition,
+                    mntPart.mdtInd
+            );
+            for (int j = 0; j < mntPart.AAT.size(); j++) {
+                System.out.format("%s ", mntPart.AAT.size());
+            }
+            System.out.format("\n");
+        }
+
+        // 매크로가 아닌 코드 출력
+        System.out.format("\n코드\n");
+        for (String s : imc) {
+            System.out.format("%s\n", s);
         }
     }
 
     public Vector<MDT> getMdtVector(){return mdtVector;}
+    public Vector<MNT> getMntVector(){return mntVector;}
+    public Vector<String> getImc(){return imc;}
 
 }

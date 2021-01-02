@@ -49,7 +49,14 @@ public class Main {
         // 자세한 과정은 FileOpen 클래스를 참조할 것
         FileOpen fileOpen = new FileOpen();
         Vector<String> originData = fileOpen.getOriginalData();
+
+        // 패스1
         Pass1 pass1 = new Pass1(originData);
+        Vector<MDT> mdtVector = pass1.getMdtVector();
+        Vector<MNT> mntVector = pass1.getMntVector();
+        Vector<String> imcVector = pass1.getImc();
+
+        //패스2
     }
 
     //methods(메소드)
