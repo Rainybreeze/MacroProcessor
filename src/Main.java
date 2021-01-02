@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -57,6 +58,8 @@ public class Main {
         Vector<String> imcVector = pass1.getImc();
 
         //패스2
+        Pass2 pass2 = new Pass2(mdtVector, mntVector, imcVector);
+        Vector<String> transformedData = pass2.getTransformedData();
     }
 
     //methods(메소드)
@@ -138,5 +141,49 @@ class FileOpen{
 
 //파일 저장 담당 클래스
 class FileSave{
-    public FileSave(){}
+    public FileSave(Vector<String> data){
+        JFileChooser saveChooser = new JFileChooser();
+        
+        // 확장자 필터 생성
+        Vector<FileNameExtensionFilter> fileNameExtensionFilters = new Vector<>();
+        fileNameExtensionFilters.add(new FileNameExtensionFilter(
+                "어셈블러 파일","s"));
+        fileNameExtensionFilters.add(new FileNameExtensionFilter(
+                "어셈블러 파일","asm"));
+        fileNameExtensionFilters.add(new FileNameExtensionFilter(
+                "텍스트 파일","txt"));
+
+        // 확장자 필터 적용 - 이 필터를 적용하게 되면 위의 필터에 적용된 확장자로만 저장할 수 있습니다.
+        for (FileNameExtensionFilter file : fileNameExtensionFilters) {
+            saveChooser.setFileFilter(file);
+        }
+
+        saveChooser.showSaveDialog(null);
+        try{
+            PrintWriter out = new PrintWriter(saveChooser.getSelectedFile());
+            for (String datum : data) {
+                out.format("%s\n", datum);
+            }
+            out.close();
+            System.out.format("저장되었습니다 : %s",saveChooser.getSelectedFile());
+        } catch (FileNotFoundException e) {
+            System.out.format("파일을 찾을수 없습니다.\n");
+            System.exit(0);
+        } catch (NullPointerException e){
+            System.out.format("파일 저장을 취소하였습니다.\n종료하려면 아무 키나 눌러주세요.\n");
+            try{
+                System.in.read();
+            }catch (IOException e1){
+                e1.printStackTrace();
+            }
+            System.exit(0);
+        }
+
+        System.out.format("종료하려면 아무 키나 눌러주세요.\n");
+        try{
+            System.in.read();
+        }catch (IOException e1){
+            e1.printStackTrace();
+        }
+    }
 }
