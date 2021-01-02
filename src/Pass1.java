@@ -5,7 +5,9 @@ Pass1
  */
 
 
+import java.util.Vector;
 
 class Pass1 {
+    public Pass1(Vector<String> originData){}
 
 }

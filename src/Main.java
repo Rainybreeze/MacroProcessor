@@ -48,7 +48,8 @@ public class Main {
         // 파일을 열어서 내용물을 불러옴
         // 자세한 과정은 FileOpen 클래스를 참조할 것
         FileOpen fileOpen = new FileOpen();
-        Vector<String> origindata = fileOpen.getOriginalData();
+        Vector<String> originData = fileOpen.getOriginalData();
+        Pass1 pass1 = new Pass1(originData);
     }
 
     //methods(메소드)
@@ -73,17 +74,19 @@ class FileOpen{
         JFileChooser chooser = new JFileChooser();
 
         // 파일 선택할 때 확장자 필터 설정
-        FileNameExtensionFilter filterFileS = new FileNameExtensionFilter(
-                "어셈블러 파일","s");
-        FileNameExtensionFilter filterFileAsm = new FileNameExtensionFilter(
-                "어셈블러 파일","asm");
-        FileNameExtensionFilter filterFileText = new FileNameExtensionFilter(
-                "텍스트 파일","txt");
+        Vector<FileNameExtensionFilter> fileNameExtensionFilters = new Vector<>();
+        fileNameExtensionFilters.add(new FileNameExtensionFilter(
+                "어셈블러 파일","s"));
+        fileNameExtensionFilters.add(new FileNameExtensionFilter(
+                "어셈블러 파일","asm"));
+        fileNameExtensionFilters.add(new FileNameExtensionFilter(
+                "텍스트 파일","txt"));
 
         // 확장자 필터 적용 - 이 필터를 적용하게 되면 위의 필터에 적용된 확장자로밖에 열지 못합니다.
-        chooser.setFileFilter(filterFileText);
-        chooser.setFileFilter(filterFileAsm);
-        chooser.setFileFilter(filterFileS);
+        for (FileNameExtensionFilter file : fileNameExtensionFilters) {
+            chooser.setFileFilter(file);
+        }
+
         
         // 파일 열기 창 생성
         chooser.showOpenDialog(null);
